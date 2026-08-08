@@ -21,7 +21,30 @@ app.get('/update-cobj', (req, res) => {
     res.render('updates', { title: 'Update Custom Object Form | Integrating With HubSpot I Practicum' });
 });
 
-// TODO: ROUTE 3 - Create a new app.post route for the custom objects form to create or update your custom object data. Once executed, redirect the user to the homepage.
+// ROUTE 3 - app.post route that takes the form data and creates a new custom object record, then redirects to the homepage.
+app.post('/update-cobj', async (req, res) => {
+    const newBook = {
+        properties: {
+            name: req.body.name,
+            author: req.body.author,
+            genre: req.body.genre
+        }
+    };
+
+    const createUrl = `https://api.hubapi.com/crm/v3/objects/${CUSTOM_OBJECT_TYPE}`;
+    const headers = {
+        Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
+        'Content-Type': 'application/json'
+    };
+
+    try {
+        await axios.post(createUrl, newBook, { headers });
+        res.redirect('/');
+    } catch (error) {
+        console.error(error.response ? error.response.data : error);
+        res.status(500).send('Error creating the custom object record');
+    }
+});
 
 // * Localhost
 app.listen(3000, () => console.log('Listening on http://localhost:3000'));
