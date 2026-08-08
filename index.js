@@ -14,7 +14,23 @@ const PRIVATE_APP_ACCESS = process.env.PRIVATE_APP_ACCESS;
 // Custom object: Books
 const CUSTOM_OBJECT_TYPE = 'REPLACE_WITH_OBJECT_TYPE_ID';
 
-// TODO: ROUTE 1 - Create a new app.get route for the homepage to call your custom object data. Pass this data along to the front-end and create a new pug template in the views folder.
+// ROUTE 1 - app.get route for the homepage. Fetches all Book records (with custom properties) and renders them in a table.
+app.get('/', async (req, res) => {
+    const booksUrl = `https://api.hubapi.com/crm/v3/objects/${CUSTOM_OBJECT_TYPE}?properties=name,author,genre`;
+    const headers = {
+        Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
+        'Content-Type': 'application/json'
+    };
+
+    try {
+        const resp = await axios.get(booksUrl, { headers });
+        const data = resp.data.results;
+        res.render('homepage', { title: 'Homepage | Integrating With HubSpot I Practicum', data });
+    } catch (error) {
+        console.error(error.response ? error.response.data : error);
+        res.status(500).send('Error fetching custom object records');
+    }
+});
 
 // ROUTE 2 - app.get route that renders the form for creating a new custom object record.
 app.get('/update-cobj', (req, res) => {
