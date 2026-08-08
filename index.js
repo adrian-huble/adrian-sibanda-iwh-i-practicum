@@ -12,7 +12,7 @@ app.use(express.json());
 const PRIVATE_APP_ACCESS = process.env.PRIVATE_APP_ACCESS;
 
 // Custom object: Books
-const CUSTOM_OBJECT_TYPE = 'REPLACE_WITH_OBJECT_TYPE_ID';
+const CUSTOM_OBJECT_TYPE = '2-67172877';
 
 // ROUTE 1 - app.get route for the homepage. Fetches all Book records (with custom properties) and renders them in a table.
 app.get('/', async (req, res) => {
